@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>媽祖知我心｜關廟天后宮</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Microsoft JhengHei",sans-serif;background:linear-gradient(160deg,#fff1d4,#f9c7ae);color:#64353b;min-height:100vh}.wrap{max-width:580px;margin:auto;padding:22px 16px}.header{text-align:center;padding:20px 0}.header h1{font-size:42px;color:#a52d42;margin:8px}.panel{background:#fffaf2;border:2px solid #e4b775;border-radius:24px;padding:24px;box-shadow:0 8px 25px #9c514025}h2{font-size:23px;line-height:1.5}p{line-height:1.85}.btn,.option{width:100%;border:0;border-radius:14px;padding:16px;margin:10px 0;font-size:17px;cursor:pointer}.btn{background:#a52d42;color:white;font-weight:bold}.option{background:#fff0d9;color:#65383b;text-align:left;font-weight:600;border:1px solid #edcfa8}.option:active{background:#ffd7a0}.small{font-size:13px;color:#846b63}.progress{height:9px;background:#eadaca;border-radius:20px;overflow:hidden}.fill{height:100%;background:#cb944b}.card{border:3px double #c18c47;border-radius:18px;padding:20px;background:#fff3dc}.deity{font-size:28px;color:#a52d42;font-weight:bold}.hidden{display:none}.center{text-align:center}.footer{text-align:center;font-size:12px;padding:20px}@media print{.actions{display:none}body{background:white}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="header"><div>🏮 關廟天后宮 🏮</div><h1>媽祖知我心</h1><div>五題尋守護・聽見自己的心</div></header>
+<section id="home" class="panel center">
+<div style="font-size:48px">🌸</div>
+<h2>此刻，哪一尊媽祖最懂你的心？</h2>
+<p>五道生活情境題，協助你整理目前的困擾，找到適合的守護方向與生活建議。</p>
+<button class="btn" onclick="start()">開始尋找我的守護媽祖</button>
+<p class="small">免費體驗・不用登入・不儲存個人答案</p>
+</section>
+<section id="quiz" class="panel hidden">
+<div id="number" class="small"></div>
+<div class="progress"><div id="fill" class="fill"></div></div>
+<h2 id="question"></h2><div id="options"></div>
+<button class="btn" style="background:#9b8177" onclick="back()">上一題</button>
+</section>
+<section id="result" class="panel hidden">
+<div class="card">
+<div class="center">🌸 關廟天后宮・專屬守護卡 🌸</div>
+<h2 id="topic" class="center"></h2>
+<div id="deity" class="deity center"></div>
+<p id="special" class="center"></p>
+<h3>💗 你的心境分析</h3><p id="analysis"></p>
+<h3>🌱 現在可以做的一件事</h3><p id="advice"></p>
+<h3>🙏 給你的溫暖提醒</h3><p id="message"></p>
+</div>
+<h3>另一個值得關注的面向</h3><p id="secondary"></p>
+<p class="small">本測驗僅供自我探索及民俗信仰文化參考，並非神明指示、醫療診斷或法律建議。</p>
+<div class="actions">
+<button class="btn" onclick="share()">分享遊戲給朋友</button>
+<button class="btn" style="background:#b88b50" onclick="window.print()">儲存／列印結果</button>
+<button class="btn" style="background:#846b63" onclick="start()">重新測驗</button>
+</div>
+</section>
+<div class="footer">關廟天后宮｜願每一顆心都能找到安定的力量</div>
+</div>
+<script>
+const data={
+health:["健康與身心照顧","天三聖母（主公）","身體健康・安定身心","你可能為自己或家人的健康操心，也可能長期忽略自己的疲憊。","安排適當休息；若有持續不適，尋求醫療協助。","照顧眾人之餘，也請疼惜自己。"],
+home:["家宅與生活環境","鎮殿大媽朴子媽","風水・地理","你希望家庭與生活環境更加安定，可能有些家宅事務尚未處理。","先檢視居家安全與實際問題，和家人討論可行的改善方式。","家，是讓心安定的地方。"],
+love:["家庭與感情","朴子二媽","姻緣・家庭","你很在乎重要的人，也渴望感情與家庭關係更加和睦。","試著坦誠表達自己的需求，也尊重彼此的界線。","好的緣分，需要理解與珍惜。"],
+protect:["衝突與阻礙","港口正三媽","降妖伏魔・守護平安","你可能感到被刁難、受到傷害，或面對難以突破的阻礙。","先釐清事實，保護自身安全，必要時保留證據並尋求協助。","願你有勇氣面對難關，也有力量守護自己。"],
+justice:["公平與權益","港口四媽","法律・土地・爭議","你可能為權益、土地或法律相關問題感到煩惱。","整理事實與相關文件，必要時諮詢專業人士。","堅守原則，也要照顧自己的心。"],
+work:["工作與事業","五媽北港媽","生意・事業・工作運","你可能承擔許多工作責任，對未來與經濟感到壓力。","列出目前最重要的工作目標，從一件能完成的小事開始。","努力的路上，也要給自己喘息的空間。"],
+social:["人際與溝通","港口六媽","人緣・公關","你可能很在意別人的想法，或在人際關係中感到委屈。","練習清楚表達想法，靠近尊重你的人。","不必討好所有人，也值得被善待。"],
+overall:["多重壓力與方向","太平媽","統攬天下之事・護太平","你可能同時面對許多問題，暫時找不到最重要的方向。","寫下所有煩惱，先處理最急迫且自己能控制的一件事。","不必一次解決所有事情，慢慢走也能走得安穩。"]
+};
+const questions=[
+["最近讓你最放不下的是什麼？",[["自己或家人的健康","health"],["家庭或感情關係","love"],["工作與經濟壓力","work"],["法律、土地或權益問題","justice"],["人際誤解與相處困難","social"],["家宅與居住環境","home"],["遭遇刁難或不公平對待","protect"],["各種問題同時出現","overall"]]],
+["當壓力來臨時，你最常有什麼感受？",[["疲倦，身體緊繃","health"],["孤單，渴望被理解","love"],["焦慮未來與收入","work"],["不甘心，想爭取公道","justice"],["怕得罪別人而委屈自己","social"],["擔心家庭環境不安穩","home"],["感到被阻撓或受傷害","protect"],["不知從哪件事開始處理","overall"]]],
+["如果明天能改善一件事，你最希望？",[["身體健康平安","health"],["家庭感情和睦","love"],["事業工作順利","work"],["糾紛圓滿解決","justice"],["人際關係改善","social"],["家宅土地安定","home"],["遠離惡意與干擾","protect"],["生活重新回到正軌","overall"]]],
+["遇到困難時，你通常怎麼做？",[["忍耐疲累，忽略身體需求","health"],["為維持關係而退讓","love"],["努力承擔所有責任","work"],["蒐集資料爭取權益","justice"],["反覆解釋希望被理解","social"],["反覆擔心家裡的事","home"],["提高警覺保護自己","protect"],["先處理別人的事而忘記自己","overall"]]],
+["此刻最想向媽祖祈求什麼？",[["身心健康","health"],["良緣與家庭幸福","love"],["工作事業順遂","work"],["公平正義與爭議解決","justice"],["好人緣與人際和諧","social"],["家宅平安","home"],["遠離傷害與阻礙","protect"],["天下太平、生活安穩","overall"]]]
+];
+let step=0,answers=[];
+function show(id){["home","quiz","result"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id))}
+function start(){step=0;answers=[];render();window.scrollTo(0,0)}
+function render(){show("quiz");document.getElementById("number").textContent="第 "+(step+1)+" 題／共 5 題";document.getElementById("fill").style.width=(step/5*100)+"%";document.getElementById("question").textContent=questions[step][0];let box=document.getElementById("options");box.innerHTML="";questions[step][1].forEach(([label,key])=>{let b=document.createElement("button");b.className="option";b.textContent=label;b.onclick=()=>{answers.push(key);step++;if(step===5)finish();else render()};box.appendChild(b)})}
+function back(){if(step===0){show("home");return}step--;answers.pop();render()}
+function finish(){let scores={};answers.forEach(x=>scores[x]=(scores[x]||0)+1);let keys=Object.keys(data).sort((a,b)=>(scores[b]||0)-(scores[a]||0));let p=data[keys[0]];["topic","deity","special","analysis","advice","message"].forEach((id,i)=>document.getElementById(id).textContent=p[i]);document.getElementById("secondary").textContent=scores[keys[1]]?"你也可以留意「"+data[keys[1]][0]+"」，認識"+data[keys[1]][1]+"的守護方向。":"你的答案較集中，可以先從主要困擾著手。";show("result");window.scrollTo(0,0)}
+async function share(){let info={title:"媽祖知我心｜關廟天后宮",text:"五題尋守護，一起探索現在的心境！",url:location.href};if(navigator.share){try{await navigator.share(info)}catch(e){}}else if(navigator.clipboard){await navigator.clipboard.writeText(info.url);alert("遊戲網址已複製")}else{prompt("請複製遊戲網址",info.url)}}
+</script>
+</body>
+</html>
