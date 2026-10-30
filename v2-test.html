@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#a52d4d">
+<title>關廟天后宮｜媽祖知我心</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;
+ background:linear-gradient(160deg,#fff3ed,#ffe8ef,#fff9ed);
+ color:#53343a;
+ min-height:100vh;
+}
+header{
+ background:linear-gradient(120deg,#a52d4d,#d76568);
+ color:white;text-align:center;padding:22px 12px;
+ box-shadow:0 4px 15px #a52d4d30;
+}
+header h1{font-size:27px;margin:8px 0}
+header p{margin:5px;font-size:14px}
+main{max-width:620px;margin:auto;padding:18px 15px 45px}
+.panel{
+ background:#fffdfb;border-radius:22px;
+ padding:24px 18px;margin-bottom:20px;
+ box-shadow:0 7px 24px #98536b20;
+}
+.center{text-align:center}
+.hidden{display:none!important}
+.logo{
+ width:230px;max-width:85%;
+ display:block;margin:0 auto 15px;
+ object-fit:contain;
+}
+h2{color:#a52d4d;font-size:23px;line-height:1.5}
+h3{color:#a52d4d}
+p{line-height:1.9}
+.btn{
+ border:0;border-radius:16px;
+ padding:15px 20px;
+ background:#b53d60;color:white;
+ font-size:17px;font-weight:bold;
+ cursor:pointer;min-height:52px;
+}
+.btn:active{transform:scale(.98)}
+.btn.secondary{background:#e8a3b3;color:#582b3a}
+.btn.gold{background:#b48738}
+.btn:disabled{opacity:.5}
+.wide{width:100%;margin:8px 0}
+.option{
+ display:block;width:100%;text-align:left;
+ border:2px solid #f0d5da;
+ border-radius:16px;background:#fff7f8;
+ padding:16px;margin:11px 0;
+ font-size:16px;color:#573840;
+ cursor:pointer;line-height:1.6;
+}
+.option:hover,.option.selected{
+ background:#ffe1e8;border-color:#bd5573;
+}
+.progress{
+ height:10px;background:#f4dce3;
+ border-radius:20px;overflow:hidden;margin:20px 0;
+}
+.bar{
+ height:100%;background:#bd5573;
+ width:0%;transition:width .3s;
+}
+.small{font-size:13px;color:#866e73}
+.deity-grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;margin:20px 0;
+}
+.deity-card{
+ background:#fff6f4;border:1px solid #eed2cf;
+ border-radius:16px;overflow:hidden;
+ text-align:center;padding-bottom:12px;
+}
+.photo{
+ width:100%;aspect-ratio:3/4;
+ object-fit:cover;object-position:center;
+ display:block;background:#f4e5df;
+}
+.deity-card strong{display:block;margin:10px 4px 3px;color:#a52d4d}
+.deity-card span{font-size:13px;color:#7b5962}
+.result-card{
+ border:2px solid #e8c4aa;border-radius:20px;
+ background:#fffaf4;padding:15px;
+}
+.result-photo{
+ width:100%;max-width:350px;
+ aspect-ratio:3/4;object-fit:cover;
+ display:block;margin:12px auto;
+ border-radius:16px;
+}
+.blessing{
+ background:#fff0e4;padding:16px;
+ border-radius:15px;margin:15px 0;
+ line-height:1.9;
+}
+.actions{display:grid;gap:10px;margin-top:20px}
+footer{text-align:center;color:#8b6570;font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🌸 關廟天后宮 🌸</h1>
+<p>媽祖知我心・尋找此刻的守護</p>
+</header>
+
+<main>
+
+<section id="home" class="panel center">
+<img class="logo" src="images/logo.png" alt="關廟天后宮Q版Logo">
+<h2>🌷 媽祖知我心 🌷</h2>
+<p>每個人的心中，都有一段正在經歷的故事。</p>
+<p>透過五個簡單的問題，探索你現在最需要的溫暖與支持。</p>
+<p>讓關廟天后宮的媽祖們，陪你找到心中的力量。</p>
+<button class="btn wide" onclick="startGame()">🌸 開始心境探索</button>
+<p class="small">約需 2 分鐘・免費體驗</p>
+</section>
+
+<section id="quiz" class="panel hidden">
+<div id="step" class="small"></div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<h2 id="question"></h2>
+<div id="options"></div>
+<button class="btn secondary wide" onclick="previousQuestion()">← 上一題</button>
+</section>
+
+<section id="result" class="panel hidden">
+<div class="center">🌸 關廟天后宮・專屬守護卡 🌸</div>
+<h2 class="center">你此刻的心靈守護</h2>
+<div class="result-card">
+<h2 id="resultName" class="center"></h2>
+<img id="resultPhoto" class="result-photo" alt="媽祖照片">
+<h3 id="resultTopic" class="center"></h3>
+<div class="blessing">
+<h3>💗 你的心境分析</h3>
+<p id="analysis"></p>
+<h3>🌱 現在可以做的一件事</h3>
+<p id="advice"></p>
+<h3>🙏 給你的溫暖提醒</h3>
+<p id="message"></p>
+</div>
+</div>
+<h3>🌼 另一個值得關注的面向</h3>
+<p id="secondary"></p>
+<div class="actions">
+<button class="btn wide" onclick="shareResult()">💌 分享我的守護結果</button>
+<button class="btn secondary wide" onclick="startGame()">🔄 再玩一次</button>
+<button class="btn gold wide" onclick="showHome()">🏠 返回首頁</button>
+</div>
+<p class="small center">本測驗僅供自我探索及民俗信仰文化交流，不代表神明指示或醫療、法律、財務專業建議。</p>
+</section>
+
+<section class="panel">
+<h2 class="center">🌸 認識關廟天后宮的媽祖們</h2>
+<p class="center small">八尊媽祖・不同的溫暖守護</p>
+<div id="deityGrid" class="deity-grid"></div>
+</section>
+
+</main>
+
+<footer>
+關廟天后宮・媽祖知我心<br>
+願每一份善念，都有溫暖相伴
+</footer>
+
+<script>
+const deities=[
+{
+name:"天三聖母（主公）",
+image:"images/tiansan.jpg",
+tag:"慈悲引領・心靈力量",
+topic:"在迷惘中找回方向",
+analysis:"你正站在人生需要重新整理的路口。你很努力，也希望事情都能圓滿，但心裡可能承擔了不少壓力。",
+advice:"寫下眼前最重要的一件事，先完成一小步。",
+message:"不必急著走完所有的路。心存善念，穩穩前行。",
+secondary:"除了尋找方向，也要留一些時間照顧自己的心。"
+},
+{
+name:"鎮殿大媽",
+image:"images/dama.jpg",
+tag:"安定守護・家庭平安",
+topic:"讓心與家庭重新安定",
+analysis:"你很重視身邊的人，希望家人平安，也常把責任放在自己肩上。",
+advice:"今天留十分鐘與家人好好說話，或讓自己安靜休息。",
+message:"家是心靈的港灣。照顧別人的同時，也別忘記照顧自己。",
+secondary:"你的責任感很珍貴，但不需要所有事情都獨自承擔。"
+},
+{
+name:"二媽",
+image:"images/erma.jpg",
+tag:"姻緣人際・情感連結",
+topic:"讓真心被溫柔理解",
+analysis:"你可能正為一段關係煩惱，或期待有人理解自己的感受。",
+advice:"試著用一句真誠、不帶責備的話表達自己的心情。",
+message:"好的緣分，需要真誠，也需要尊重與時間。",
+secondary:"先理解自己的需求，才能建立更自在的關係。"
+},
+{
+name:"港口正三媽",
+image:"images/sanma.jpg",
+tag:"身心安康・平安祝福",
+topic:"重新照顧身心的平衡",
+analysis:"最近的你可能有些疲倦，身體或情緒都需要更多關照。",
+advice:"安排適當休息、補充水分；若身體持續不適，尋求醫療協助。",
+message:"平安是珍貴的福氣，善待自己的身心，就是重要的開始。",
+secondary:"生活不必時時滿分，適度休息也很有力量。"
+},
+{
+name:"四媽",
+image:"images/sima.jpg",
+tag:"公道是非・土地家宅",
+topic:"面對難題，守住原則",
+analysis:"你可能正面對權益、家宅或是非方面的困擾，希望事情得到公平處理。",
+advice:"把事實、日期及相關資料整理清楚，必要時請教合適的專業人士。",
+message:"遇事保持清明與正直，一步一步尋找合宜的解決方式。",
+secondary:"處理紛爭時，也要保護自己的情緒與安全。"
+},
+{
+name:"五媽",
+image:"images/wuma.jpg",
+tag:"工作事業・穩健前行",
+topic:"為努力找到新的方向",
+analysis:"你對工作或未來有期待，也可能正面臨選擇、壓力與責任。",
+advice:"選出一項最能改善現況的工作任務，訂下可完成的小目標。",
+message:"每一分踏實努力，都是為未來累積力量。",
+secondary:"事業重要，健康與家庭的平衡也同樣值得珍惜。"
+},
+{
+name:"六媽",
+image:"images/liuma.jpg",
+tag:"人緣和合・善緣相伴",
+topic:"在人群中找回自在",
+analysis:"你希望與人相處更順利，也可能對誤解或人際壓力感到疲憊。",
+advice:"主動關心一位值得珍惜的人，同時練習建立適當界線。",
+message:"以善意待人，也以溫柔對待自己。",
+secondary:"真正的好人緣，不需要勉強自己討好所有人。"
+},
+{
+name:"太平媽",
+image:"images/taiping.jpg",
+tag:"平安順遂・安穩生活",
+topic:"讓日子回到安穩的節奏",
+analysis:"你渴望生活平順，最近也許有些事情讓你感到不安或忙亂。",
+advice:"整理一件拖延的小事，讓今天比昨天多一分踏實。",
+message:"心安，便能看見前方的光。願你日日平安，步步安穩。",
+secondary:"不需要凡事完美，穩定而持續的努力就很好。"
+}
+];
+
+const questions=[
+{
+q:"當你靜下心來，現在最牽掛的是什麼？",
+a:[
+["人生方向與重要決定",[3,0,0,0,0,1,0,0]],
+["家人的平安與生活",[0,3,0,1,0,0,0,1]],
+["感情與人際關係",[0,0,3,0,0,0,2,0]],
+["身體健康與情緒",[0,0,0,3,0,0,0,1]],
+["工作、權益或現實難題",[0,0,0,0,2,3,0,0]]
+]
+},
+{
+q:"最近讓你最感到疲憊的事情是？",
+a:[
+["不知道下一步怎麼走",[3,0,0,0,0,0,0,0]],
+["照顧家人、承擔責任",[0,3,0,1,0,0,0,0]],
+["關係中的誤會或距離",[0,0,2,0,0,0,3,0]],
+["身心壓力與疲倦",[0,0,0,3,0,0,0,1]],
+["工作壓力或不公平的事",[0,0,0,0,2,3,0,0]]
+]
+},
+{
+q:"如果今天能實現一個小小心願，你希望？",
+a:[
+["得到清楚的方向",[3,0,0,0,0,0,0,0]],
+["家人平安、生活安穩",[0,2,0,0,0,0,0,3]],
+["感情順利、有人理解",[0,0,3,0,0,0,2,0]],
+["身體健康、心情平靜",[0,0,0,3,0,0,0,1]],
+["事業順利、事情公正",[0,0,0,0,3,3,0,0]]
+]
+},
+{
+q:"遇到困難時，你最需要哪一種支持？",
+a:[
+["有人指引我方向",[3,0,0,0,0,0,0,0]],
+["有人給我安定與陪伴",[0,3,0,0,0,0,0,2]],
+["有人願意理解我的心",[0,0,3,0,0,0,2,0]],
+["有時間休息與恢復",[0,0,0,3,0,0,0,0]],
+["有方法解決現實問題",[0,0,0,0,3,2,0,0]]
+]
+},
+{
+q:"你希望接下來的日子，最先改善的是？",
+a:[
+["對未來更有信心",[3,0,0,0,0,1,0,0]],
+["家庭與日常更安穩",[0,3,0,0,0,0,0,2]],
+["感情與人緣更和諧",[0,0,3,0,0,0,3,0]],
+["健康與內心更平靜",[0,0,0,3,0,0,0,2]],
+["工作、權益與財務規劃",[0,0,0,0,2,3,0,0]]
+]
+}
+];
+
+let current=0;
+let answers=[];
+let latestResult=null;
+
+function show(id){
+["home","quiz","result"].forEach(x=>{
+document.getElementById(x).classList.toggle("hidden",x!==id);
+});
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showHome(){show("home")}
+
+function startGame(){
+current=0;answers=[];
+show("quiz");renderQuestion();
+}
+
+function renderQuestion(){
+document.getElementById("step").textContent=
+"第 "+(current+1)+" 題／共 "+questions.length+" 題";
+document.getElementById("bar").style.width=
+(current/questions.length*100)+"%";
+document.getElementById("question").textContent=questions[current].q;
+const box=document.getElementById("options");
+box.innerHTML="";
+questions[current].a.forEach((item,i)=>{
+const btn=document.createElement("button");
+btn.className="option"+(answers[current]===i?" selected":"");
+btn.textContent=item[0];
+btn.onclick=()=>selectAnswer(i);
+box.appendChild(btn);
+});
+}
+
+function selectAnswer(i){
+answers[current]=i;
+if(current<questions.length-1){
+current++;renderQuestion();
+}else{
+calculateResult();
+}
+}
+
+function previousQuestion(){
+if(current>0){current--;renderQuestion()}
+else{showHome()}
+}
+
+function calculateResult(){
+const scores=Array(deities.length).fill(0);
+answers.forEach((a,qi)=>{
+const weights=questions[qi].a[a][1];
+weights.forEach((v,i)=>scores[i]+=v);
+});
+let best=0;
+for(let i=1;i<scores.length;i++){
+if(scores[i]>scores[best])best=i;
+}
+latestResult=deities[best];
+const d=latestResult;
+document.getElementById("resultName").textContent=d.name;
+document.getElementById("resultPhoto").src=d.image;
+document.getElementById("resultTopic").textContent=d.topic;
+document.getElementById("analysis").textContent=d.analysis;
+document.getElementById("advice").textContent=d.advice;
+document.getElementById("message").textContent=d.message;
+document.getElementById("secondary").textContent=d.secondary;
+show("result");
+}
+
+async function shareResult(){
+if(!latestResult)return;
+const text="🌸 關廟天后宮｜媽祖知我心\n"+
+"我的心靈守護是："+latestResult.name+"\n"+
+latestResult.topic+"\n"+
+latestResult.message+"\n"+
+"一起來玩："+location.href;
+if(navigator.share){
+try{
+await navigator.share({title:"媽祖知我心",text});
+return;
+}catch(e){
+if(e.name==="AbortError")return;
+}
+}
+try{
+await navigator.clipboard.writeText(text);
+alert("已複製分享內容，可以貼到 LINE 或 Facebook！");
+}catch(e){
+prompt("請複製以下分享文字：",text);
+}
+}
+
+function renderDeities(){
+const grid=document.getElementById("deityGrid");
+deities.forEach(d=>{
+const card=document.createElement("div");
+card.className="deity-card";
+const img=document.createElement("img");
+img.className="photo";
+img.src=d.image;
+img.alt=d.name;
+img.loading="lazy";
+const title=document.createElement("strong");
+title.textContent=d.name;
+const tag=document.createElement("span");
+tag.textContent=d.tag;
+card.append(img,title,tag);
+grid.appendChild(card);
+});
+}
+renderDeities();
+</script>
+</body>
+</html>
